@@ -28,8 +28,8 @@ fisher_packages:
   - PatrickF1/fzf.fish
   - IlanCosman/tide@v5
 fish_config_files:
-  - { "name": "_tide_item_space.fish", "location": "functions/" }
-  - { "name": "config.fish", "location": "" }
+  - { "name": "_tide_item_space.fish", "location": "functions/"}
+  - { "name": "config.fish", "location": ""}
 dracula_config_files:
   - { "name": "Dracula.colorscheme", "application": "konsole", "destination": "{{ home }}/.local/share/konsole", "destination_name": "Dracula.colorscheme" }
   - { "name": "Xresources", "application": "xresources", "destination": "{{ home }}", "destination_name": ".Xresources" }
