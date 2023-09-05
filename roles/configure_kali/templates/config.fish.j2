@@ -23,6 +23,7 @@ if status is-interactive
     alias cat="batcat"
     alias catp="batcat --plain"
     alias tmux-save="tmux capture-pane -epS - > /home/{{ ansible_user }}/Documents/tmux/$(date +'%s')-pane-history.txt"
+    alias tmux-save-plain="tmux capture-pane -pS - > /home/{{ ansible_user }}/Documents/tmux/$(date +'%s')-pane-history-plain.txt"
 
     function tmux-save-name; 
         tmux capture-pane -epS - > /home/{{ ansible_user }}/Documents/tmux/$argv.txt; 
