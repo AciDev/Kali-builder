@@ -1,0 +1,17 @@
+- name: Change shell to Fish
+  ansible.builtin.shell: "chsh {{ ansible_user }} -s /usr/bin/fish"
+  become: true
+  become_method: sudo
+
+- name: Install Fisher
+  ansible.builtin.shell: "fish -c '/bin/cat {{ build }}/fisher/functions/fisher.fish | source && fisher install jorgebucaran/fisher'"
+
+- name: Install Fisher packages
+  ansible.builtin.shell: "fish -c 'fisher install {{ item }}'"
+  loop: "{{ fisher_packages }}"
+
+- name: Copy Fish config
+  ansible.builtin.copy:
+    src: "../files/{{ item.name }}"
+    dest: "{{ config }}/fish/{{ item.location }}{{ item.name }}"
+  loop: "{{ fish_config_files }}"

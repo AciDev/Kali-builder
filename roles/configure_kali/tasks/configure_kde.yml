@@ -1,0 +1,33 @@
+- name: Copy KDE config files
+  ansible.builtin.copy:
+    src: "../files/{{ item.name }}"
+    dest: "{{ item.location }}/{{ item.name }}"
+  loop: "{{ kde_config_files }}"
+
+- name: Check if icon backup exists
+  ansible.builtin.stat:
+    path: "{{ home }}/.face.bak"
+  register: icon_backup
+
+- name: Make original icon backup
+  ansible.builtin.copy:
+    remote_src: True
+    src: "{{ home }}/.face"
+    dest: "{{ home }}/.face.bak"
+  when: icon_backup.stat.exists == False
+
+- name: Remove old icon
+  ansible.builtin.file:
+    path: "{{ home }}/.face"
+    state: absent
+
+- name: Link user icon 
+  ansible.builtin.file:
+    src: "{{ icon_location }}"
+    dest: "{{ home }}/.face"
+    state: hard
+
+- name: Copy lockscreen config
+  ansible.builtin.template:
+    src: "../templates/kscreenlockerrc.j2"
+    dest: "{{ config }}/kscreenlockerrc"

@@ -1,0 +1,5 @@
+- name: Clone Git repositories
+  ansible.builtin.git:
+    repo: 'https://github.com/{{ item.repository }}.git'
+    dest: "{{ build }}/{{ item.name }}"
+  loop: "{{ git_packages }}"

@@ -1,0 +1,53 @@
+---
+# tasks file for configure-kali
+- name: Update Kali
+  ansible.builtin.import_tasks:
+    file: update.yml 
+
+- name: Install apt packages
+  ansible.builtin.import_tasks:
+    file: install_packages.yml
+
+- name: Create file structure
+  ansible.builtin.import_tasks:
+    file: create_structure.yml
+
+- name: Install git packages
+  ansible.builtin.import_tasks:
+    file: install_git_packages.yml
+
+- name: Configure Ranger
+  ansible.builtin.import_tasks:
+    file: configure_ranger.yml
+
+- name: Configure Dracula
+  ansible.builtin.import_tasks:
+    file: configure_dracula.yml
+
+- name: Configure Fish
+  ansible.builtin.import_tasks:
+    file: configure_fish.yml
+
+- name: Configure Neovim
+  ansible.builtin.import_tasks:
+    file: configure_neovim.yml
+
+- name: Configure Btop
+  ansible.builtin.import_tasks:
+    file: configure_btop.yml
+
+- name: Configure KDE
+  ansible.builtin.import_tasks:
+    file: configure_kde.yml
+
+- name: Configure Tmux
+  ansible.builtin.import_tasks:
+    file: configure_tmux.yml
+
+- name: Configure Batcat
+  ansible.builtin.import_tasks:
+    file: configure_batcat.yml
+
+- name: Configure SDDM
+  ansible.builtin.import_tasks:
+    file: configure_sddm.yml

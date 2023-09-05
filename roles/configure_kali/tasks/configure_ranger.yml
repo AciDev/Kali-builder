@@ -1,0 +1,22 @@
+- name: Create Ranger config
+  ansible.builtin.shell: "ranger --copy-config=all"
+
+- name: Copy Ranger config files
+  ansible.builtin.copy:
+    src: "../files/{{ item }}"
+    dest: "{{ config }}/ranger/{{ item }}"
+  loop:
+    - scope.sh
+    - rc.conf
+  
+- name: Copy Highlight config files
+  ansible.builtin.copy:
+    src: "../files/dracula.theme"
+    dest: "/usr/share/highlight/themes/dracula.theme"
+  become: true
+  become_method: sudo
+  
+- name: Create the colorscheme directory
+  ansible.builtin.file:
+    path: "{{ config }}/ranger/colorschemes"
+    state: directory

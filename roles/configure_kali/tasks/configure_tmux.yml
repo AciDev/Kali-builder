@@ -1,0 +1,20 @@
+- name: Copy Tmux config files
+  ansible.builtin.copy:
+    src: "../files/.tmux.conf"
+    dest: "{{ home }}/.tmux.conf"
+
+- name: Run Tmux to initialise TPM
+  ansible.builtin.command: "tmux new-session -d"
+  args:
+    chdir: /tmp
+
+- name: Kill Tmux
+  ansible.builtin.command: "tmux kill-server"
+  args:
+    chdir: /tmp
+  
+- name: Install Plugins
+  ansible.builtin.command: "{{ home }}/.tmux/plugins/tpm/bin/install_plugins"
+
+- name: Update Plugins
+  ansible.builtin.command: "{{ home }}/.tmux/plugins/tpm/bin/update_plugins all"

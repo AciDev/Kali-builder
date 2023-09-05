@@ -1,0 +1,44 @@
+---
+# vars file for configure-kali
+home: "/home/{{ ansible_user }}"
+build: "{{ home }}/Documents/Build"
+dracula: "{{ build }}/Dracula"
+config: "{{ home }}/.config"
+icon: "dracula-waves-bd93f9.png"
+wallpaper: "dracula-waves-44475a.png"
+icon_location: "{{ dracula }}/wallpaper/second-collection/waves/{{ icon }}"
+wallpaper_location: "{{ dracula }}/wallpaper/second-collection/waves/{{ wallpaper }}"
+packages:
+  - git
+  - fzf
+  - fish
+  - neovim
+  - bat
+  - btop
+  - ranger
+  - highlight
+git_packages:
+  - { "name": "fisher", "repository": "jorgebucaran/fisher" }
+  - { "name": "Dracula/konsole", "repository": "dracula/konsole" }
+  - { "name": "Dracula/xresources", "repository": "dracula/xresources" }
+  - { "name": "Dracula/ranger", "repository": "dracula/ranger" }
+  - { "name": "Dracula/wallpaper", "repository": "dracula/wallpaper" }
+fisher_packages:
+  - dracula/fish
+  - PatrickF1/fzf.fish
+  - IlanCosman/tide@v5
+fish_config_files:
+  - { "name": "_tide_item_space.fish", "location": "functions/" }
+  - { "name": "config.fish", "location": "" }
+dracula_config_files:
+  - { "name": "Dracula.colorscheme", "application": "konsole", "destination": "{{ home }}/.local/share/konsole", "destination_name": "Dracula.colorscheme" }
+  - { "name": "Xresources", "application": "xresources", "destination": "{{ home }}", "destination_name": ".Xresources" }
+  - { "name": "dracula.py", "application": "ranger", "destination": "{{ config }}/ranger/colorschemes", "destination_name": "dracula.py" }
+kde_config_files:
+  - { "name": "konsolerc", "location": "{{ config }}" }
+  - { "name": "Kali-Dracula-Acin.profile", "location": "{{ home }}/.local/share/konsole" }
+sddm_config_files:
+  - { "name": "theme.conf.user", "location": "/usr/share/sddm/themes/breeze" }
+sddm_link_files:
+  - { "src": "{{ icon_location }}", "location": "/usr/share/sddm/faces/{{ ansible_user }}.face.icon" }
+  - { "src": "{{ wallpaper_location }}", "location": "/usr/share/sddm/themes/breeze/{{ wallpaper }}" }

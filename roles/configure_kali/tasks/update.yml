@@ -1,0 +1,30 @@
+- name: Updating apt repo/cache
+  ansible.builtin.apt:
+    update_cache: true
+    cache_valid_time: 3600
+  become: true
+  become_method: ansible.builtin.sudo
+
+- name: Full upgrade
+  ansible.builtin.apt:
+    upgrade: full
+  become: true
+  become_method: sudo
+
+- name: Dist upgrade
+  ansible.builtin.apt:
+    upgrade: dist
+  become: true
+  become_method: sudo
+
+- name: Remove unused dependencies
+  ansible.builtin.apt:
+    autoremove: yes
+  become: true
+  become_method: sudo
+
+- name: Reboot after updates
+  ansible.builtin.reboot:
+    reboot_timeout: 3600
+  become: true
+  become_method: sudo

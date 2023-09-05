@@ -1,0 +1,13 @@
+- name: Check if config exists
+  ansible.builtin.stat:
+    path: "{{ config }}/bat/config"
+  register: bat_config
+
+- name: Create config folder structure
+  ansible.builtin.command: "batcat --generate-config-file"
+  when: bat_config.stat.exists == False
+
+- name: Insert batcat config
+  ansible.builtin.copy:
+    src: "../files/batcat.conf"
+    dest: "{{ config }}/bat/config"

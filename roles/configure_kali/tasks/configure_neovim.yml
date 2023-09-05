@@ -1,0 +1,15 @@
+- name: Create Neovim config folder
+  ansible.builtin.file:
+    path: "{{ config }}/nvim"
+    state: directory
+
+- name: Copy Neovim config
+  ansible.builtin.copy:
+    src: "../files/init.vim"
+    dest: "{{ config }}/nvim/init.vim"
+
+- name: Install Neovim packages
+  ansible.builtin.shell: "nvim --headless {{ item }}"
+  loop:
+    - "+qall"
+    - "+PlugInstall +qall"

@@ -1,0 +1,9 @@
+kali:
+  hosts:
+    kali-machine:
+      ansible_port: 22
+      ansible_user: Username
+      ansible_password: Password
+      ansible_become_password: SudoPassword
+      ansible_host: IPADDRESS
+      ansible_connection: ssh

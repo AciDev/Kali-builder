@@ -1,0 +1,14 @@
+- name: Create the Build directory
+  ansible.builtin.file:
+    path: "{{ home }}/Documents/Build"
+    state: directory
+
+- name: Create the Dracula directory
+  ansible.builtin.file:
+    path: "{{ home }}/Documents/Build/Dracula"
+    state: directory
+
+- name: Create the Tmux log directory
+  ansible.builtin.file:
+    path: "{{ home }}/Documents/tmux"
+    state: directory
