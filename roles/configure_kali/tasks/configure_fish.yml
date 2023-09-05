@@ -11,7 +11,7 @@
   loop: "{{ fisher_packages }}"
 
 - name: Copy Fish config
-  ansible.builtin..template:
+  ansible.builtin.template:
     src: "../templates/{{ item.name }}.j2"
     dest: "{{ config }}/fish/{{ item.location }}{{ item.name }}"
   loop: "{{ fish_config_files }}"
