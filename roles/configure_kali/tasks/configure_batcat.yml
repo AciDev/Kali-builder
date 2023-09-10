@@ -5,9 +5,12 @@
 
 - name: Create config folder structure
   ansible.builtin.command: "batcat --generate-config-file"
-  when: bat_config.stat.exists == False
+  register: batcat_output
+  changed_when: batcat_output.rc == "0"
+  when: not bat_config.stat.exists
 
 - name: Insert batcat config
   ansible.builtin.copy:
-    src: "../files/batcat.conf"
+    src: "{{ files }}/batcat.conf"
     dest: "{{ config }}/bat/config"
+    mode: "644"

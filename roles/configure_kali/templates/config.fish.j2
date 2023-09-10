@@ -19,13 +19,24 @@ if status is-interactive
     set --universal tide_cmd_duration_icon ""
     set --universal tide_pwn_icon ""
     set -Ux EDITOR nvim
+    set -Ux FZF_DEFAULT_OPTS "--color=fg:#f8f8f2,bg:#282a36,hl:#bd93f9 --color=fg+:#f8f8f2,bg+:#44475a,hl+:#bd93f9 --color=info:#ffb86c,prompt:#50fa7b,pointer:#ff79c6 --color=marker:#ff79c6,spinner:#ffb86c,header:#6272a4"
     alias vim="nvim"
     alias cat="batcat"
     alias catp="batcat --plain"
+    alias bat="batcat"
+    alias ip="ip --color=auto"
     alias tmux-save="tmux capture-pane -epS - > /home/{{ ansible_user }}/Documents/tmux/$(date +'%s')-pane-history.txt"
     alias tmux-save-plain="tmux capture-pane -pS - > /home/{{ ansible_user }}/Documents/tmux/$(date +'%s')-pane-history-plain.txt"
+    alias cme="crackmapexec"
+    alias ferox-proxy="feroxbuster --thorough -k --proxy "
 
     function tmux-save-name; 
         tmux capture-pane -epS - > /home/{{ ansible_user }}/Documents/tmux/$argv.txt; 
+    end
+
+    function ligolo-start; 
+        sudo ip tuntap add user {{ ansible_user }} mode tun ligolo;
+        sudo ip link set ligolo up;
+        sudo /home/{{ ansible_user }}/Documents/Host/Ligolo/Proxy/Linux/proxy $argv;
     end
 end

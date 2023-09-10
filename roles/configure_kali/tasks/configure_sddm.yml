@@ -1,22 +1,24 @@
-- name: Link images to folders 
+- name: Link images to folders
   ansible.builtin.file:
     src: "{{ item.src }}"
     dest: "{{ item.location }}"
     state: hard
+    mode: "644"
   loop: "{{ sddm_link_files }}"
   become: true
-  become_method: sudo
+  become_method: ansible.builtin.sudo
 
 - name: Copy SDDM config files
   ansible.builtin.template:
-    src: "../templates/{{ item.name }}.j2"
+    src: "{{ templates }}/{{ item.name }}.j2"
     dest: "{{ item.location }}/{{ item.name }}"
+    mode: "644"
   loop: "{{ sddm_config_files }}"
   become: true
-  become_method: sudo
+  become_method: ansible.builtin.sudo
 
 - name: Reboot after login changes
   ansible.builtin.reboot:
     reboot_timeout: 3600
   become: true
-  become_method: sudo
+  become_method: ansible.builtin.sudo

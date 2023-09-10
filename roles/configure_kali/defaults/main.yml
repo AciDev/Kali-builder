@@ -1,2 +1,7 @@
 ---
 # defaults file for configure-kali
+kde: true
+vm: true
+wsl: false
+files: ../files
+templates: ../templates

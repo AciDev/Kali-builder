@@ -2,4 +2,4 @@
   ansible.builtin.apt:
     pkg: "{{ packages }}"
   become: true
-  become_method: sudo
+  become_method: ansible.builtin.sudo

@@ -1,2 +1,9 @@
 ---
 # handlers file for configure-kali
+- name: Generate grub config
+  ansible.builtin.command: "grub-mkconfig -o /boot/grub/grub.cfg"
+  register: grub_generate
+  changed_when: grub_generate.rc == "0"
+  become: true
+  become_method: ansible.builtin.sudo
+  listen: "Generate grub config"

@@ -1,14 +1,28 @@
-- name: Create the Build directory
-  ansible.builtin.file:
-    path: "{{ home }}/Documents/Build"
-    state: directory
-
 - name: Create the Dracula directory
   ansible.builtin.file:
     path: "{{ home }}/Documents/Build/Dracula"
     state: directory
+    mode: "755"
 
 - name: Create the Tmux log directory
   ansible.builtin.file:
     path: "{{ home }}/Documents/tmux"
     state: directory
+    mode: "755"
+
+- name: Create the Windows directory
+  ansible.builtin.file:
+    path: "{{ home }}/Documents/Host/{{ item }}"
+    state: directory
+    mode: "755"
+  loop:
+    - "Windows"
+    - "Linux"
+    - "Ligolo/Agent/OSX/ARM"
+    - "Ligolo/Agent/Linux/ARM/v6"
+    - "Ligolo/Agent/Linux/ARM/v7"
+    - "Ligolo/Agent/Windows/ARM/v6"
+    - "Ligolo/Agent/Windows/ARM/v7"
+    - "Ligolo/Proxy/OSX/ARM"
+    - "Ligolo/Proxy/Linux/ARM"
+    - "Ligolo/Proxy/Windows/ARM"

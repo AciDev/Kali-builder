@@ -1,8 +1,12 @@
 ---
 # tasks file for configure-kali
+- name: Configure Grub
+  ansible.builtin.import_tasks:
+    file: configure_grub.yml
+
 - name: Update Kali
   ansible.builtin.import_tasks:
-    file: update.yml 
+    file: update.yml
 
 - name: Install apt packages
   ansible.builtin.import_tasks:
@@ -11,6 +15,10 @@
 - name: Create file structure
   ansible.builtin.import_tasks:
     file: create_structure.yml
+
+- name: Install web packages
+  ansible.builtin.import_tasks:
+    file: install_web_packages.yml
 
 - name: Install git packages
   ansible.builtin.import_tasks:
@@ -36,9 +44,15 @@
   ansible.builtin.import_tasks:
     file: configure_btop.yml
 
+- name: Configure VM tools
+  ansible.builtin.import_tasks:
+    file: configure_vm.yml
+  when: vm
+
 - name: Configure KDE
   ansible.builtin.import_tasks:
     file: configure_kde.yml
+  when: kde
 
 - name: Configure Tmux
   ansible.builtin.import_tasks:
@@ -51,3 +65,4 @@
 - name: Configure SDDM
   ansible.builtin.import_tasks:
     file: configure_sddm.yml
+  when: kde

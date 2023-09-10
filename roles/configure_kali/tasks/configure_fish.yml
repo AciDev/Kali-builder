@@ -1,17 +1,41 @@
 - name: Change shell to Fish
-  ansible.builtin.shell: "chsh {{ ansible_user }} -s /usr/bin/fish"
+  ansible.builtin.command: "chsh {{ ansible_user }} -s /usr/bin/fish"
   become: true
-  become_method: sudo
+  become_method: ansible.builtin.sudo
+  register: chsh_output
+  when: ansible_user_shell != "/usr/bin/fish"
+  changed_when: chsh_output.rc == 0
+
+- name: Check for fisher functions
+  ansible.builtin.stat:
+    path: "{{ config }}/fish/functions/fisher.fish"
+  register: fisher_functions_result
+
+- name: Check for fisher completions
+  ansible.builtin.stat:
+    path: "{{ config }}/fish/completions/fisher.fish"
+  register: fisher_completions_result
 
 - name: Install Fisher
-  ansible.builtin.shell: "fish -c '/bin/cat {{ build }}/fisher/functions/fisher.fish | source && fisher install jorgebucaran/fisher'"
+  ansible.builtin.command: "fish -c '/bin/cat {{ build }}/fisher/functions/fisher.fish | source && fisher install jorgebucaran/fisher'"
+  register: fisher_install_output
+  changed_when: fisher_install_output.rc == 0
+  when: (not fisher_functions_result.stat.exists) and (not fisher_completions_result.stat.exists)
 
 - name: Install Fisher packages
-  ansible.builtin.shell: "fish -c 'fisher install {{ item }}'"
+  ansible.builtin.command: "fish -c 'fisher install {{ item }}'"
   loop: "{{ fisher_packages }}"
+  register: fisher_output
+  changed_when: fisher_output.rc == 0
+
+- name: Update Fisher packages
+  ansible.builtin.command: "fish -c 'fisher update'"
+  register: fisher__update_output
+  changed_when: fisher__update_output.rc == 0
 
 - name: Copy Fish config
   ansible.builtin.template:
-    src: "../templates/{{ item.name }}.j2"
+    src: "{{ templates }}/{{ item.name }}.j2"
     dest: "{{ config }}/fish/{{ item.location }}{{ item.name }}"
+    mode: "{{ item.mode }}"
   loop: "{{ fish_config_files }}"

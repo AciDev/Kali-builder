@@ -8,6 +8,9 @@ icon: "dracula-waves-bd93f9.png"
 wallpaper: "dracula-waves-44475a.png"
 icon_location: "{{ dracula }}/wallpaper/second-collection/waves/{{ icon }}"
 wallpaper_location: "{{ dracula }}/wallpaper/second-collection/waves/{{ wallpaper }}"
+kde: true
+vm: true
+wsl: false
 packages:
   - git
   - fzf
@@ -17,28 +20,71 @@ packages:
   - btop
   - ranger
   - highlight
+  - neofetch
+  - testssl.sh
+  - feroxbuster
+  - jython
+  - photon
+  - nuclei
+  - peass
 git_packages:
-  - { "name": "fisher", "repository": "jorgebucaran/fisher" }
-  - { "name": "Dracula/konsole", "repository": "dracula/konsole" }
-  - { "name": "Dracula/xresources", "repository": "dracula/xresources" }
-  - { "name": "Dracula/ranger", "repository": "dracula/ranger" }
-  - { "name": "Dracula/wallpaper", "repository": "dracula/wallpaper" }
+  - name: "fisher"
+    repository: "jorgebucaran/fisher"
+    type: true
+  - name: "Kali-VMware-Fixes"
+    repository: "AciDev/Kali-VMware-Fixes"
+    type: "{{ vm }}"
+  - name: "Dracula/konsole"
+    repository: "dracula/konsole"
+    type: "{{ kde }}"
+  - name: "Dracula/xresources"
+    repository: "dracula/xresources"
+    type: true
+  - name: "Dracula/ranger"
+    repository: "dracula/ranger"
+    type: true
+  - name: "Dracula/wallpaper"
+    repository: "dracula/wallpaper"
+    type: true
 fisher_packages:
   - dracula/fish
   - PatrickF1/fzf.fish
   - IlanCosman/tide@v5
 fish_config_files:
-  - { "name": "_tide_item_space.fish", "location": "functions/"}
-  - { "name": "config.fish", "location": ""}
+  - name: "_tide_item_space.fish"
+    location: "functions/"
+    mode: "644"
+  - name: "config.fish"
+    location: ""
+    mode: "644"
 dracula_config_files:
-  - { "name": "Dracula.colorscheme", "application": "konsole", "destination": "{{ home }}/.local/share/konsole", "destination_name": "Dracula.colorscheme" }
-  - { "name": "Xresources", "application": "xresources", "destination": "{{ home }}", "destination_name": ".Xresources" }
-  - { "name": "dracula.py", "application": "ranger", "destination": "{{ config }}/ranger/colorschemes", "destination_name": "dracula.py" }
+  - name: "Dracula.colorscheme"
+    application: "konsole"
+    destination: "{{ home }}/.local/share/konsole"
+    destination_name: "Dracula.colorscheme"
+    type: "{{ kde }}"
+  - name: "Xresources"
+    application: "xresources"
+    destination: "{{ home }}"
+    destination_name: ".Xresources"
+    type: true
+  - name: "dracula.py"
+    application: "ranger"
+    destination: "{{ config }}/ranger/colorschemes"
+    destination_name: "dracula.py"
+    type: true
 kde_config_files:
-  - { "name": "konsolerc", "location": "{{ config }}" }
-  - { "name": "Kali-Dracula-Acin.profile", "location": "{{ home }}/.local/share/konsole" }
+  - name: "konsolerc"
+    location: "{{ config }}"
+  - name: "powermanagementprofilesrc"
+    location: "{{ config }}"
+  - name: "Kali-Dracula-Acin.profile"
+    location: "{{ home }}/.local/share/konsole"
 sddm_config_files:
-  - { "name": "theme.conf.user", "location": "/usr/share/sddm/themes/breeze" }
+  - name: "theme.conf.user"
+    location: "/usr/share/sddm/themes/breeze"
 sddm_link_files:
-  - { "src": "{{ icon_location }}", "location": "/usr/share/sddm/faces/{{ ansible_user }}.face.icon" }
-  - { "src": "{{ wallpaper_location }}", "location": "/usr/share/sddm/themes/breeze/{{ wallpaper }}" }
+  - src: "{{ icon_location }}"
+    location: "/usr/share/sddm/faces/{{ ansible_user }}.face.icon"
+  - src: "{{ wallpaper_location }}"
+    location: "/usr/share/sddm/themes/breeze/{{ wallpaper }}"

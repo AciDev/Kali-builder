@@ -2,8 +2,10 @@
   ansible.builtin.file:
     path: "{{ config }}/btop"
     state: directory
+    mode: "755"
 
 - name: Copy Btop config
   ansible.builtin.copy:
-    src: "../files/btop.conf"
+    src: "{{ files }}/btop.conf"
     dest: "{{ config }}/btop/btop.conf"
+    mode: "644"
