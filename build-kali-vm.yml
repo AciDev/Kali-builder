@@ -23,4 +23,4 @@
         chdir: /git/
         command: /scripts/build.sh
         responses:
-          (.*)Do you want to continue? [Y/n] (.*): "n"
+          (.*)Do you want to continue? [Y/n] (.*): "Y"
