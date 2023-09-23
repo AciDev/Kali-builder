@@ -9,8 +9,6 @@
     - name: Full upgrade
       ansible.builtin.apt:
         upgrade: full
-      become: true
-      become_method: ansible.builtin.sudo
 
     - name: Dist upgrade
       ansible.builtin.apt:
