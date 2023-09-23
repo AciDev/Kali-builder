@@ -20,6 +20,7 @@
 
     - name: Case insensitive password string match
       ansible.builtin.expect:
-      command: /scripts/build.sh
-      responses:
-        (.*)Do you want to continue? [Y/n] (.*): "n"
+        chdir: /git/
+        command: /scripts/build.sh
+        responses:
+          (.*)Do you want to continue? [Y/n] (.*): "n"
