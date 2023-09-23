@@ -1,0 +1,21 @@
+- name: Build Kali VM
+  hosts: kali-docker
+  tasks:
+    - name: Updating apt repo/cache
+      ansible.builtin.apt:
+        update_cache: true
+        cache_valid_time: 3600
+
+    - name: Full upgrade
+      ansible.builtin.apt:
+        upgrade: full
+      become: true
+      become_method: ansible.builtin.sudo
+
+    - name: Dist upgrade
+      ansible.builtin.apt:
+        upgrade: dist
+
+    - name: Remove unused dependencies
+      ansible.builtin.apt:
+        autoremove: true
