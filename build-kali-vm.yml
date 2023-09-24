@@ -21,3 +21,5 @@
     - name: Use 'argv' to send a command as a list - leave 'command' empty
       ansible.builtin.command:
         cmd: "/git/build.sh -f vmware -s 100 -v vmware -x rolling-kde-vmware -z -D kde -L en_GB.UTF-8 -U acin:acin -Z Europe/London"
+      environment:
+        http_proxy: "{{ proxy }}"
