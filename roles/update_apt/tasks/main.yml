@@ -1,0 +1,5 @@
+---
+# tasks file for update-apt
+- name: Update Apt
+  ansible.builtin.import_tasks:
+    file: update.yml

@@ -1,4 +1,5 @@
 - name: "Customizing Kali"
   hosts: kali
   roles:
+    - update_apt
     - configure_kali

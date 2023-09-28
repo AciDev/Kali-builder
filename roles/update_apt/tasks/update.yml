@@ -23,10 +23,3 @@
     autoremove: true
   become: true
   become_method: ansible.builtin.sudo
-
-- name: Reboot after updates
-  ansible.builtin.reboot:
-    reboot_timeout: 3600
-  become: true
-  become_method: ansible.builtin.sudo
-  when: not wsl and cache_update.changed

@@ -1,0 +1,5 @@
+---
+# tasks file for kali_vm_builder
+- name: Run Build
+  ansible.builtin.import_tasks:
+    file: build_kali_vm.yml

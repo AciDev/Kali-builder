@@ -4,9 +4,12 @@
   ansible.builtin.import_tasks:
     file: configure_grub.yml
 
-- name: Update Kali
-  ansible.builtin.import_tasks:
-    file: update.yml
+- name: Reboot after updates
+  ansible.builtin.reboot:
+    reboot_timeout: 3600
+  become: true
+  become_method: ansible.builtin.sudo
+  when: not wsl and cache_update.changed
 
 - name: Install apt packages
   ansible.builtin.import_tasks:
