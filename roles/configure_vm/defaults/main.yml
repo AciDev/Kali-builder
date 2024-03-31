@@ -1,0 +1,10 @@
+---
+# defaults file for configure_vm
+configure_vm_apt: true
+
+configure_vm_home: "/home/{{ ansible_user }}"
+configure_vm_build: "{{ configure_vm_home }}/Documents/Build"
+
+configure_vm_packages_list:
+  - git
+  - build-essential

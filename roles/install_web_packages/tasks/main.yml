@@ -1,0 +1,12 @@
+---
+# tasks file for install_web_packages
+- name: Install APT Packages For Virtual Machines
+  ansible.builtin.include_role:
+    name: install_apt_packages
+  when: install_web_packages_apt
+  vars:
+    install_apt_packages_list: "{{ install_web_packages_packages_list }}"
+
+- name: Install Ligolo-ng
+  ansible.builtin.import_tasks:
+    file: ligolo.yml

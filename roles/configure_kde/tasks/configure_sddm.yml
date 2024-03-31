@@ -1,0 +1,35 @@
+- name: Link Images To Folders
+  ansible.builtin.file:
+    src: '{{ item.src }}'
+    dest: '{{ item.location }}'
+    state: hard
+    mode: '644'
+  loop: '{{ configure_kde_sddm_link_files }}'
+  become: true
+  become_method: ansible.builtin.sudo
+
+- name: Check if user theme backup exists
+  ansible.builtin.stat:
+    path: '/usr/share/sddm/themes/breeze/theme.conf.user.bak'
+  become: true
+  become_method: ansible.builtin.sudo
+  register: theme_backup
+
+- name: Make original user theme backup
+  ansible.builtin.copy:
+    remote_src: true
+    src: '/usr/share/sddm/themes/breeze/theme.conf.user'
+    dest: '/usr/share/sddm/themes/breeze/theme.conf.user.bak'
+    mode: '644'
+  become: true
+  become_method: ansible.builtin.sudo
+  when: not theme_backup.stat.exists
+
+- name: Copy SDDM Config Files
+  ansible.builtin.template:
+    src: '{{ configure_kde_templates }}/{{ item.name }}.j2'
+    dest: '{{ item.location }}/{{ item.name }}'
+    mode: '644'
+  loop: '{{ configure_kde_sddm_config_files }}'
+  become: true
+  become_method: ansible.builtin.sudo

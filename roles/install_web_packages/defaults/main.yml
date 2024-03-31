@@ -1,0 +1,9 @@
+---
+# defaults file for install_web_packages
+install_web_packages_apt: true
+
+install_web_packages_home: "/home/{{ ansible_user }}"
+
+install_web_packages_packages_list:
+  - unzip
+  - tar

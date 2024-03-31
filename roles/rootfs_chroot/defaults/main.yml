@@ -1,0 +1,4 @@
+---
+# defaults file for rootfs_chroot
+files: "../files"
+templates: "../templates"

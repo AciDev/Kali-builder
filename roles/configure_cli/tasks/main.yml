@@ -1,0 +1,58 @@
+---
+# tasks file for configure_cli
+- name: Install APT Packages For The CLI
+  ansible.builtin.include_role:
+    name: install_apt_packages
+  when: configure_cli_apt
+  vars:
+    install_apt_packages_list: "{{ configure_cli_packages_list }}"
+
+- name: Install APT Packages For The Fish CLI
+  ansible.builtin.include_role:
+    name: install_apt_packages
+  when: configure_cli_fish and configure_cli_apt
+  vars:
+    install_apt_packages_list: "{{ configure_cli_fish_packages_list }}"
+
+- name: Install Git Packages For The CLI
+  ansible.builtin.include_role:
+    name: install_git_packages
+  vars:
+    install_git_packages_vm: false
+    install_git_packages_cli: true
+    install_git_packages_apt: "{{ configure_cli_apt }}"
+    install_git_packages_kde: "{{ configure_cli_kde }}"
+    install_git_packages_dracula: true
+
+- name: Create file structure
+  ansible.builtin.import_tasks:
+    file: create_structure.yml
+
+- name: Configure Ranger
+  ansible.builtin.import_tasks:
+    file: configure_ranger.yml
+
+- name: Configure Dracula
+  ansible.builtin.import_tasks:
+    file: configure_dracula.yml
+
+- name: Configure Fish
+  ansible.builtin.import_tasks:
+    file: configure_fish.yml
+  when: configure_cli_fish
+
+- name: Configure Neovim
+  ansible.builtin.import_tasks:
+    file: configure_neovim.yml
+
+- name: Configure Btop
+  ansible.builtin.import_tasks:
+    file: configure_btop.yml
+
+- name: Configure Tmux
+  ansible.builtin.import_tasks:
+    file: configure_tmux.yml
+
+- name: Configure Batcat
+  ansible.builtin.import_tasks:
+    file: configure_batcat.yml

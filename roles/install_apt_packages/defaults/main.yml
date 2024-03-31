@@ -1,0 +1,24 @@
+---
+# defaults file for install_apt_packages
+install_apt_packages_list:
+  - git
+  - fzf
+  - fish
+  - neovim
+  - bat
+  - eog
+  - btop
+  - ranger
+  - highlight
+  - neofetch
+  - testssl.sh
+  - feroxbuster
+  - jython
+  - photon
+  - nuclei
+  - peass
+  - build-essential
+  - unzip
+  - tar
+  - curl
+  - fd-find

@@ -1,0 +1,13 @@
+- name: Copy Grub File
+  ansible.builtin.copy:
+    src: "{{ configure_grub_files }}/grub"
+    dest: "/etc/default/grub"
+    mode: "644"
+  register: grub_file_add
+  become: true
+  become_method: ansible.builtin.sudo
+  notify:
+    - "Generate grub config"
+
+- name: Flush handlers
+  ansible.builtin.meta: flush_handlers

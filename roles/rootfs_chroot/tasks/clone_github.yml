@@ -1,0 +1,4 @@
+- name: Clone the Kali-builder # noqa: latest
+  ansible.builtin.git:
+    repo: https://github.com/AciDev/Kali-builder.git
+    dest: /root/Kali-builder

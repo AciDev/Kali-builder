@@ -1,0 +1,22 @@
+---
+# tasks file for configure_vm
+- name: Install APT Packages For Virtual Machines
+  ansible.builtin.include_role:
+    name: install_apt_packages
+  when: configure_vm_apt
+  vars:
+    install_apt_packages_list: "{{ configure_vm_packages_list }}"
+
+- name: Install Git Packages For Virtual Machines
+  ansible.builtin.include_role:
+    name: install_git_packages
+  vars:
+    install_git_packages_vm: true
+    install_git_packages_cli: false
+    install_git_packages_apt: "{{ configure_vm_apt }}"
+    install_git_packages_kde: false
+    install_git_packages_dracula: false
+
+- name: Compile and SUID the VM Fixes Binary
+  ansible.builtin.import_tasks:
+    file: compile_suid_tool.yml

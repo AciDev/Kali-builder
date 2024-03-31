@@ -1,0 +1,56 @@
+---
+# defaults file for configure_cli
+configure_cli_kde: true
+configure_cli_apt: true
+configure_cli_fish: true
+
+configure_cli_files: ../files
+configure_cli_templates: ../templates
+
+configure_cli_home: "/home/{{ ansible_user }}"
+configure_cli_build: "{{ configure_cli_home }}/Documents/Build"
+configure_cli_dracula: "{{ configure_cli_build }}/Dracula"
+configure_cli_config: "{{ configure_cli_home }}/.config"
+
+configure_cli_dracula_config_files:
+  - name: "Dracula.colorscheme"
+    application: "konsole"
+    destination: "{{ configure_cli_home }}/.local/share/konsole"
+    destination_name: "Dracula.colorscheme"
+    type: "{{ configure_cli_kde }}"
+  - name: "Xresources"
+    application: "xresources"
+    destination: "{{ configure_cli_home }}"
+    destination_name: ".Xresources"
+    type: true
+  - name: "dracula.py"
+    application: "ranger"
+    destination: "{{ configure_cli_config }}/ranger/colorschemes"
+    destination_name: "dracula.py"
+    type: true
+
+configure_cli_fisher_packages:
+  - dracula/fish
+  - PatrickF1/fzf.fish
+  - IlanCosman/tide@v6
+
+configure_cli_fish_config_files:
+  - name: "_tide_item_space.fish"
+    location: "functions/"
+    mode: "644"
+  - name: "config.fish"
+    location: ""
+    mode: "644"
+
+configure_cli_packages_list:
+  - neovim
+  - bat
+  - btop
+  - ranger
+  - highlight
+  - tmux
+
+configure_cli_fish_packages_list:
+  - fzf
+  - fish
+  - curl

@@ -3,3 +3,6 @@
 - name: Run Build
   ansible.builtin.import_tasks:
     file: build_kali_vm.yml
+  until: kali_vm_builder_success
+  retries: 10
+  delay: 60

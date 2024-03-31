@@ -1,0 +1,20 @@
+- name: Create the Dracula directory
+  ansible.builtin.file:
+    path: "{{ configure_cli_home }}/Documents/Build/Dracula"
+    state: directory
+    mode: "755"
+
+- name: Create the Tmux log directory
+  ansible.builtin.file:
+    path: "{{ configure_cli_home }}/Documents/tmux"
+    state: directory
+    mode: "755"
+
+- name: Create the hosting directories
+  ansible.builtin.file:
+    path: "{{ configure_cli_home }}/Documents/Host/{{ item }}"
+    state: directory
+    mode: "755"
+  loop:
+    - "Windows"
+    - "Linux"

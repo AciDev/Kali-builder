@@ -1,0 +1,41 @@
+---
+# defaults file for configure_kde
+configure_kde_vm: true
+configure_kde_apt: true
+
+configure_kde_files: ../files
+configure_kde_templates: ../templates
+
+configure_kde_home: '/home/{{ ansible_user }}'
+configure_kde_build: '{{ configure_kde_home }}/Documents/Build'
+configure_kde_config: '{{ configure_kde_home }}/.config'
+configure_kde_dracula: '{{ configure_kde_build }}/Dracula'
+
+configure_kde_icon: 'dracula-waves-bd93f9.png'
+configure_kde_wallpaper: 'dracula-waves-44475a.png'
+configure_kde_icon_location: '{{ configure_kde_dracula }}/wallpaper/second-collection/waves/{{ configure_kde_icon }}'
+configure_kde_wallpaper_location: '{{ configure_kde_dracula }}/wallpaper/second-collection/waves/{{ configure_kde_wallpaper }}'
+
+configure_kde_kde_config_files:
+  - name: 'konsolerc'
+    location: '{{ configure_kde_config }}'
+  - name: 'powermanagementprofilesrc'
+    location: '{{ configure_kde_config }}'
+  - name: 'Kali-Dracula-Acin.profile'
+    location: '{{ configure_kde_home }}/.local/share/konsole'
+
+configure_kde_kde_root_config_files:
+  - name: 'state.conf'
+    location: '/var/lib/sddm'
+
+configure_kde_sddm_link_files:
+  - src: '{{ configure_kde_icon_location }}'
+    location: '/usr/share/sddm/faces/{{ ansible_user }}.face.icon'
+  - src: '{{ configure_kde_wallpaper_location }}'
+    location: '/usr/share/sddm/themes/breeze/{{ configure_kde_wallpaper }}'
+
+configure_kde_sddm_config_files:
+  - name: 'kde_settings.conf'
+    location: '/etc/sddm.conf.d'
+  - name: 'theme.conf.user'
+    location: '/usr/share/sddm/themes/breeze'

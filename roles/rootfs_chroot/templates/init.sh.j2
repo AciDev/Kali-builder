@@ -1,0 +1,25 @@
+#!/bin/sh
+
+FILE=/root/.ansible-configured
+if test -f "$FILE"; then
+    exit 0
+fi
+
+apt-get --quiet update 
+env DEBIAN_FRONTEND=noninteractive apt-get --quiet --yes install --no-install-recommends ansible-core sshpass
+apt-get --quiet --yes --purge autoremove
+apt-get --quiet --yes clean
+
+mkdir -p /home/{{ rootfs_chroot_normal_user }}/.ssh
+chmod 700 /home/{{ rootfs_chroot_normal_user }}/.ssh
+chown {{ rootfs_chroot_normal_user }}:{{ rootfs_chroot_normal_user }} /home/{{ rootfs_chroot_normal_user }}/.ssh
+touch /home/{{ rootfs_chroot_normal_user }}/.ssh/known_hosts
+chmod 644 /home/{{ rootfs_chroot_normal_user }}/.ssh/known_hosts
+chown {{ rootfs_chroot_normal_user }}:{{ rootfs_chroot_normal_user }} /home/{{ rootfs_chroot_normal_user }}/.ssh/known_hosts
+ssh-keyscan -H 127.0.0.1 > /root/.ssh/known_hosts
+ssh-keyscan -H 127.0.0.1 > /home/{{ rootfs_chroot_normal_user }}/.ssh/known_hosts
+
+ansible-galaxy install -r /root/Kali-builder/requirements.yml
+ansible-playbook /root/Kali-builder/main.yml -i /root/Kali-builder/inventory/host.yml
+
+rm /root/Kali-builder/inventory/host.yml

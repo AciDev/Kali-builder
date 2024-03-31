@@ -1,0 +1,7 @@
+- name: Link configs to folders
+  ansible.builtin.file:
+    src: "{{ configure_cli_dracula }}/{{ item.application }}/{{ item.name }}"
+    dest: "{{ item.destination }}/{{ item.destination_name }}"
+    state: link
+  when: item.type
+  loop: "{{ configure_cli_dracula_config_files }}"

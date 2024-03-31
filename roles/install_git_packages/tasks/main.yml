@@ -1,0 +1,49 @@
+---
+# tasks file for install_git_packages
+- name: Create the Build Directory
+  ansible.builtin.file:
+    path: "{{ install_git_packages_home }}/Documents/Build"
+    state: directory
+    mode: "755"
+
+- name: Install APT Packages For Git
+  ansible.builtin.include_role:
+    name: install_apt_packages
+  when: install_git_packages_apt
+  vars:
+    install_apt_packages_list: "{{ install_git_packages_packages_list }}"
+
+- name: Create the Dracula directory
+  ansible.builtin.file:
+    path: "{{ install_git_packages_home }}/Documents/Build/Dracula"
+    state: directory
+    mode: "755"
+  when: install_git_packages_dracula
+
+- name: Download Git Packages For The CLI
+  ansible.builtin.import_tasks:
+    file: git_install.yml
+  when: install_git_packages_cli
+  vars:
+    git_install_packages: "{{ install_git_packages_cli_git_packages }}"
+
+- name: Download Git Packages For Virtual Machines
+  ansible.builtin.import_tasks:
+    file: git_install.yml
+  when: install_git_packages_vm
+  vars:
+    git_install_packages: "{{ install_git_packages_vm_git_packages }}"
+
+- name: Download Git Packages For Dracula Theme
+  ansible.builtin.import_tasks:
+    file: git_install.yml
+  when: install_git_packages_dracula
+  vars:
+    git_install_packages: "{{ install_git_packages_dracula_git_packages }}"
+
+- name: Download Git Packages For Dracula Theme and KDE
+  ansible.builtin.import_tasks:
+    file: git_install.yml
+  when: install_git_packages_dracula and install_git_packages_kde
+  vars:
+    git_install_packages: "{{ install_git_packages_kde_dracula_git_packages }}"

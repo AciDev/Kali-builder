@@ -1,0 +1,5 @@
+---
+# tasks file for configure_grub
+- name: Configure Grub
+  ansible.builtin.import_tasks:
+    file: configure_grub.yml

@@ -1,0 +1,30 @@
+- name: Copy Template Files
+  ansible.builtin.template:
+    src: "{{ templates }}/{{ item.name }}.j2"
+    dest: "{{ item.location }}/{{ item.name }}"
+    mode: "{{ item.mode }}"
+  loop:
+    - name: "init.sh"
+      location: "/root"
+      mode: 770
+    - name: "host.yml"
+      location: "/root/Kali-builder/inventory"
+      mode: 644
+
+- name: Copy Service file
+  ansible.builtin.copy:
+    src: "{{ files }}/init-script.service"
+    dest: "/etc/systemd/system/init-script.service"
+    mode: "644"
+
+- name: Create the chroot directory
+  ansible.builtin.file:
+    path: /etc/systemd/system/init-script.service.d
+    state: directory
+    mode: '0755'
+
+- name: Copy Service file
+  ansible.builtin.copy:
+    src: "{{ files }}/env.conf"
+    dest: "/etc/systemd/system/init-script.service.d/env.conf"
+    mode: "644"

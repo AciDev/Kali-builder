@@ -1,0 +1,7 @@
+- name: Enable Services
+  ansible.builtin.systemd_service:
+    name: "{{ item }}"
+    enabled: true
+  loop:
+    - ssh
+    - init-script

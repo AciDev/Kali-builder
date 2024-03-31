@@ -1,5 +1,99 @@
-- name: "Customizing Kali"
-  hosts: kali
-  roles:
-    - update_apt
-    - configure_kali
+- name: Customising Kali
+  hosts: kali-machine
+  vars:
+    vm: '{{ custom_vm_opt | default(true)}}'
+    apt: '{{ custom_apt_opt | default(true)}}'
+    kde: '{{ custom_kde_opt | default(true)}}'
+    cli: '{{ custom_cli_opt | default(true)}}'
+    fish: '{{ custom_fish_opt | default(true)}}'
+    dracula: '{{ custom_dracula_opt | default(true)}}'
+    restart: '{{ custom_restart_opt | default(true)}}'
+  tasks:
+    - name: Check if configured file exists
+      ansible.builtin.stat:
+        path: /root/.ansible-configured
+      register: configured
+
+    - name: Remove the configured file
+      ansible.builtin.file:
+        path: /root/.ansible-configured
+        state: absent
+      when: configured.stat.exists
+
+    - name: Perform Updates
+      block:
+        - name: Update Packages Before Build
+          ansible.builtin.include_role:
+            name: update_apt
+            public: true
+
+        - name: Reboot after updates
+          ansible.builtin.reboot:
+            reboot_timeout: 3600
+          become: true
+          become_method: ansible.builtin.sudo
+          when: restart and cache_update.changed
+      when: apt
+
+    - name: Install APT Packages
+      ansible.builtin.include_role:
+        name: install_apt_packages
+      when: apt
+
+    - name: Configure Grub
+      ansible.builtin.include_role:
+        name: configure_grub
+      when: vm
+
+    - name: Configure VM
+      ansible.builtin.include_role:
+        name: configure_vm
+      when: vm
+      vars:
+        configure_vm_apt: '{{ apt }}'
+
+    - name: Install Web Packages
+      ansible.builtin.include_role:
+        name: install_web_packages
+      vars:
+        install_web_packages_apt: '{{ apt }}'
+
+    - name: Install Git Packages
+      ansible.builtin.include_role:
+        name: install_git_packages
+      vars:
+        install_git_packages_vm: '{{ vm }}'
+        install_git_packages_cli: '{{ cli }}'
+        install_git_packages_apt: '{{ apt }}'
+        install_git_packages_kde: '{{ kde }}'
+        install_git_packages_dracula: '{{ dracula }}'
+
+    - name: Configure CLI
+      ansible.builtin.include_role:
+        name: configure_cli
+      when: cli
+      vars:
+        configure_cli_kde: '{{ kde }}'
+        configure_cli_apt: '{{ apt }}'
+        configure_cli_fish: '{{ fish }}'
+
+    - name: Configure KDE and SDDM Changes
+      ansible.builtin.include_role:
+        name: configure_kde
+      when: kde and dracula
+      vars:
+        configure_kde_vm: '{{ vm }}'
+        configure_kde_apt: '{{ apt }}'
+
+    - name: Reboot after SDDM Changes
+      ansible.builtin.reboot:
+        reboot_timeout: 3600
+      become: true
+      become_method: ansible.builtin.sudo
+      when: restart and kde
+    
+    - name: Success file
+        ansible.builtin.file:
+          path: /root/.ansible-configured
+          state: touch
+          mode: 0644

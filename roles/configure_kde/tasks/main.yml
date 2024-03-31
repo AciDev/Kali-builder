@@ -1,0 +1,19 @@
+---
+# tasks file for configure_kde
+- name: Install Git Packages
+  ansible.builtin.include_role:
+    name: install_git_packages
+  vars:
+    install_git_packages_vm: "{{ configure_kde_vm }}"
+    install_git_packages_cli: false
+    install_git_packages_apt: "{{ configure_kde_apt }}"
+    install_git_packages_kde: true
+    install_git_packages_dracula: true
+
+- name: Configure KDE
+  ansible.builtin.import_tasks:
+    file: configure_kde.yml
+
+- name: Configure SDDM
+  ansible.builtin.import_tasks:
+    file: configure_sddm.yml

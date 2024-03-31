@@ -1,0 +1,13 @@
+---
+# tasks file for rootfs_chroot
+- name: Clone the githubs
+  ansible.builtin.import_tasks:
+    file: clone_github.yml
+
+- name: Add needed files
+  ansible.builtin.import_tasks:
+    file: add_files.yml
+
+- name: Enable services for first boot
+  ansible.builtin.import_tasks:
+    file: start_services.yml

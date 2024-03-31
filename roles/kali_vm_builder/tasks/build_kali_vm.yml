@@ -1,19 +1,20 @@
 - name: Build Kali VM
+  when: not kali_vm_builder_success
   block:
     - name: "Run the kali Build command"
       ansible.builtin.command:
         chdir: "/git/"
-        cmd: "/git/build.sh -f vmware -s 100 -v vmware -x rolling-kde-vmware -z -D kde -L en_GB.UTF-8 -U acin:acin -Z Europe/London"
+        cmd: "/git/build.sh {{ kali_vm_builder_build_options }}"
       environment:
         http_proxy: "{{ proxy }}"
       register: build_output
       changed_when: build_output == 0
-      when: not success
+      when: not kali_vm_builder_success
 
     - name: Set the success fact
       ansible.builtin.set_fact:
-        success: true
-      when: not success
+        kali_vm_builder_success: true
+      when: not kali_vm_builder_success
   rescue:
     - name: Update apt-cacher-ng
       ansible.builtin.command:

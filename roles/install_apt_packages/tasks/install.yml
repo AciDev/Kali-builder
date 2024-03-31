@@ -1,0 +1,5 @@
+- name: Install a List Of Packages
+  ansible.builtin.apt:
+    pkg: "{{ install_apt_packages_list }}"
+  become: true
+  become_method: ansible.builtin.sudo

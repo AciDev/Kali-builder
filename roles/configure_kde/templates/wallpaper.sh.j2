@@ -1,0 +1,6 @@
+#!/bin/sh
+
+/usr/bin/plasma-apply-wallpaperimage {{ configure_kde_wallpaper_location }}
+
+/usr/bin/rm {{ configure_kde_config }}/autostart/Wallpaper_Changer.desktop
+/usr/bin/rm {{ configure_kde_home }}/wallpaper.sh

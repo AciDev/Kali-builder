@@ -1,0 +1,10 @@
+---
+# tasks file for install_apt_packages
+- name: Update Packages Before Install
+  ansible.builtin.include_role:
+    name: update_apt
+  register: cache_update
+
+- name: Install APT Packages
+  ansible.builtin.import_tasks:
+    file: install.yml

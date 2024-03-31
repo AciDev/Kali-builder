@@ -1,0 +1,33 @@
+---
+# defaults file for install_git_packages
+install_git_packages_home: "/home/{{ ansible_user }}"
+install_git_packages_build: "{{ install_git_packages_home }}/Documents/Build"
+
+install_git_packages_vm: true
+install_git_packages_cli: true
+install_git_packages_apt: true
+install_git_packages_kde: true
+install_git_packages_dracula: true
+
+install_git_packages_cli_git_packages:
+  - name: "fisher"
+    repository: "jorgebucaran/fisher"
+
+install_git_packages_vm_git_packages:
+  - name: "Kali-VMware-Fixes"
+    repository: "AciDev/Kali-VMware-Fixes"
+
+install_git_packages_kde_dracula_git_packages:
+  - name: "Dracula/konsole"
+    repository: "dracula/konsole"
+
+install_git_packages_dracula_git_packages:
+  - name: "Dracula/xresources"
+    repository: "dracula/xresources"
+  - name: "Dracula/ranger"
+    repository: "dracula/ranger"
+  - name: "Dracula/wallpaper"
+    repository: "dracula/wallpaper"
+
+install_git_packages_packages_list:
+  - git

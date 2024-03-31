@@ -1,0 +1,18 @@
+kali:
+  hosts:
+    kali-machine:
+      ansible_port: 22
+      ansible_user: {{ rootfs_chroot_normal_user }}
+      ansible_password: {{ rootfs_chroot_normal_user_password }}
+      ansible_become_password: {{ rootfs_chroot_normal_user_password }}
+      ansible_host: 127.0.0.1
+      ansible_connection: ssh
+  
+  vars:
+    custom_vm_opt: true
+    custom_apt_opt: true
+    custom_kde_opt: true
+    custom_cli_opt: true
+    custom_fish_opt: true
+    custom_dracula_opt: true
+    custom_restart_opt: false

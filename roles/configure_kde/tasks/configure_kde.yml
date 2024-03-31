@@ -1,0 +1,71 @@
+- name: Create the autostart directory
+  ansible.builtin.file:
+    path: "{{ configure_kde_config }}/autostart"
+    state: directory
+    mode: "755"
+
+- name: Copy KDE config files
+  ansible.builtin.copy:
+    src: "{{ configure_kde_files }}/{{ item.name }}"
+    dest: "{{ item.location }}/{{ item.name }}"
+    mode: "644"
+  loop: "{{ configure_kde_kde_config_files }}"
+
+- name: Copy KDE config files (Root)
+  ansible.builtin.template:
+    src: "{{ configure_kde_templates }}/{{ item.name }}.j2"
+    dest: "{{ item.location }}/{{ item.name }}"
+    mode: "644"
+  become: true
+  become_method: ansible.builtin.sudo
+  loop: "{{ configure_kde_kde_root_config_files }}"
+
+- name: Check if icon backup exists
+  ansible.builtin.stat:
+    path: "{{ configure_kde_home }}/.face.bak"
+  register: icon_backup
+
+- name: Make original icon backup
+  ansible.builtin.copy:
+    remote_src: true
+    src: "{{ configure_kde_home }}/.face"
+    dest: "{{ configure_kde_home }}/.face.bak"
+    mode: "644"
+  when: not icon_backup.stat.exists
+
+- name: Remove old icon
+  ansible.builtin.file:
+    path: "{{ configure_kde_home }}/.face"
+    state: absent
+
+- name: Link user icon
+  ansible.builtin.file:
+    src: "{{ configure_kde_icon_location }}"
+    dest: "{{ configure_kde_home }}/.face"
+    mode: "644"
+    state: hard
+
+- name: Copy Lockscreen Config
+  ansible.builtin.template:
+    src: "{{ configure_kde_templates }}/kscreenlockerrc.j2"
+    dest: "{{ configure_kde_config }}/kscreenlockerrc"
+    mode: "644"
+
+- name: Copy Wallpaper Script
+  ansible.builtin.template:
+    src: "{{ configure_kde_templates }}/wallpaper.sh.j2"
+    dest: "{{ configure_kde_home }}/wallpaper.sh"
+    mode: "744"
+
+- name: Copy Wallpaper Autostart File
+  ansible.builtin.template:
+    src: "{{ configure_kde_templates }}/Wallpaper_Changer.desktop.j2"
+    dest: "{{ configure_kde_config }}/autostart/Wallpaper_Changer.desktop"
+    mode: "600"
+
+- name: Copy VM Autostart File
+  ansible.builtin.template:
+    src: "{{ configure_kde_templates }}/suid-vm-tools.desktop.j2"
+    dest: "{{ configure_kde_config }}/autostart/suid-vm-tools.desktop"
+    mode: "600"
+  when: configure_kde_vm

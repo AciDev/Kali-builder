@@ -1,0 +1,6 @@
+- name: Clone Git Repositories # noqa: latest
+  ansible.builtin.git:
+    repo: 'https://github.com/{{ item.repository }}.git'
+    dest: "{{ install_git_packages_build }}/{{ item.name }}"
+    force: true
+  loop: "{{ git_install_packages }}"

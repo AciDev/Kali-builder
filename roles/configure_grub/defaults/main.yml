@@ -1,0 +1,3 @@
+---
+# defaults file for configure_grub
+configure_grub_files: ../files

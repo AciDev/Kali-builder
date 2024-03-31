@@ -1,0 +1,153 @@
+- name: Build Kali VM Rootfs
+  hosts: kali-machine
+  vars:
+    username: '{{ vm_user | default("acin")}}'
+    password: '{{ vm_pass | default("acin")}}'
+    desktop: 'kde'
+    distro_name: 'acin'
+    final_format: 'vmware'
+    final_varient: 'vmware'
+    build_options_rootfs: '-v rootfs -x {{ distro_name }}-root -D {{ desktop }} -L en_GB.UTF-8 -U {{ username }}:{{ password }} -Z Europe/London'
+  tasks:
+    - name: Update apt-cacher-ng
+      ansible.builtin.command:
+        chdir: '/scripts/Apt-Cacher-NG-Updater/'
+        cmd: 'python3 update-apt-cacher-ng.py --url {{ proxy }} --browserless {{ browserless }}'
+      changed_when: true
+
+    - name: Run Kali Builder Attempts
+      ansible.builtin.include_role:
+        name: update_apt
+
+    - name: Run Kali Rootfs Builder Attempts
+      ansible.builtin.include_role:
+        name: kali_vm_builder
+        public: true
+      vars:
+        kali_vm_builder_build_options: '{{ build_options_rootfs }}'
+
+    - name: Confirm chroot directory unmounted
+      ansible.posix.mount:
+        path: '/output/chroot/{{ item }}'
+        state: unmounted
+      loop:
+        - proc
+        - sys
+        - dev
+
+    - name: Delete chroot directory (If exists)
+      ansible.builtin.file:
+        path: /output/chroot
+        state: absent
+
+    - name: Create the chroot directory
+      ansible.builtin.file:
+        path: /output/chroot
+        state: directory
+        mode: '0755'
+
+    - name: Extract the rootfs
+      ansible.builtin.unarchive:
+        src: '/git/images/rootfs-{{ distro_name }}-root-amd64.tar.gz'
+        dest: /output/chroot
+        remote_src: true
+
+    - name: Mount chroot proc
+      ansible.posix.mount:
+        path: /output/chroot/proc
+        src: /proc
+        state: ephemeral
+        fstype: proc
+
+    - name: Mount chroot sys
+      ansible.posix.mount:
+        path: /output/chroot/sys
+        src: /sys
+        state: ephemeral
+        fstype: sysfs
+
+    - name: Mount chroot dev
+      ansible.posix.mount:
+        path: /output/chroot/dev
+        src: /dev
+        opts: bind
+        state: ephemeral
+        fstype: none
+
+    - name: Copy a resolve.conf for network
+      ansible.builtin.copy:
+        src: /etc/resolv.conf
+        dest: /output/chroot/etc/resolv.conf
+        remote_src: true
+        mode: '0644'
+
+- name: Build and Configure Kali Chroot
+  hosts: kali-chroot
+  vars:
+    user: '{{ vm_user | default("acin")}}'
+    password: '{{ vm_pass | default("acin")}}'
+  tasks:
+    - name: Run the rootfs builder
+      ansible.builtin.include_role:
+        name: rootfs_chroot
+      vars:
+        rootfs_chroot_normal_user: '{{ user }}'
+        rootfs_chroot_normal_user_password: '{{ password }}'
+
+- name: Build Kali VM
+  hosts: kali-machine
+  vars:
+    username: '{{ vm_user | default("acin")}}'
+    password: '{{ vm_pass | default("acin")}}'
+    desktop: 'kde'
+    distro_name: 'acin'
+    final_format: 'vmware'
+    final_varient: 'vmware'
+    build_options_final: '-f {{ final_format }} -v {{ final_varient }} -z -r images/rootfs-{{ distro_name }}-root-mod-amd64.tar.gz'
+  tasks:
+    - name: Unmount chroot
+      ansible.posix.mount:
+        path: '/output/chroot/{{ item }}'
+        state: unmounted
+      loop:
+        - proc
+        - sys
+        - dev
+
+    - name: Compress the chroot with modifications
+      community.general.archive:
+        path: /output/chroot/
+        dest: '/git/images/rootfs-{{ distro_name }}-root-mod-amd64.tar.gz'
+        mode: '0644'
+
+    - name: Update apt-cacher-ng
+      ansible.builtin.command:
+        chdir: '/scripts/Apt-Cacher-NG-Updater/'
+        cmd: 'python3 update-apt-cacher-ng.py --url {{ proxy }} --browserless {{ browserless }}'
+      changed_when: true
+
+    - name: Run Kali Builder Attempts
+      ansible.builtin.include_role:
+        name: update_apt
+
+    - name: Reset the success fact
+      ansible.builtin.set_fact:
+        kali_vm_builder_success: false
+
+    - name: Run Kali Rootfs Builder Attempts
+      ansible.builtin.include_role:
+        name: kali_vm_builder
+        public: true
+      vars:
+        kali_vm_builder_build_options: '{{ build_options_final }}'
+      loop:
+        - 1
+        - 2
+        - 3
+        - 4
+        - 5
+
+    - name: Delete the chroot directory
+      ansible.builtin.file:
+        path: /output/chroot
+        state: absent
