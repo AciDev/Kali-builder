@@ -13,12 +13,16 @@
       ansible.builtin.stat:
         path: /root/.ansible-configured
       register: configured
+      become: true
+      become_method: ansible.builtin.sudo
 
     - name: Remove the configured file
       ansible.builtin.file:
         path: /root/.ansible-configured
         state: absent
       when: configured.stat.exists
+      become: true
+      become_method: ansible.builtin.sudo
 
     - name: Perform Updates
       block:
