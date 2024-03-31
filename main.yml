@@ -91,9 +91,11 @@
       become: true
       become_method: ansible.builtin.sudo
       when: restart and kde
-    
+
     - name: Success file
-        ansible.builtin.file:
-          path: /root/.ansible-configured
-          state: touch
-          mode: 0644
+      ansible.builtin.file:
+        path: /root/.ansible-configured
+        state: touch
+        mode: 0644
+      become: true
+      become_method: ansible.builtin.sudo
