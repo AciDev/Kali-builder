@@ -25,6 +25,7 @@
       become_method: ansible.builtin.sudo
 
     - name: Perform Updates
+      when: apt
       block:
         - name: Update Packages Before Build
           ansible.builtin.include_role:
@@ -36,8 +37,7 @@
             reboot_timeout: 3600
           become: true
           become_method: ansible.builtin.sudo
-          when: restart and cache_update.changed
-      when: apt
+          when: restart and update_apt_cache_update.changed
 
     - name: Install APT Packages
       ansible.builtin.include_role:
@@ -100,6 +100,6 @@
       ansible.builtin.file:
         path: /root/.ansible-configured
         state: touch
-        mode: 0644
+        mode: "0644"
       become: true
       become_method: ansible.builtin.sudo

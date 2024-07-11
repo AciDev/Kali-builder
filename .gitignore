@@ -3,5 +3,6 @@ inventory/hosts.yml
 inventory/id_rsa
 inventory/id_rsa.pub
 inventory/test.yml
+inventory/*.sh
 inventory/*.yml
 test.yml

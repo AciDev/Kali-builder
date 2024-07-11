@@ -3,7 +3,7 @@
 - name: Update Packages Before Install
   ansible.builtin.include_role:
     name: update_apt
-  register: cache_update
+  register: update_apt_cache_update
 
 - name: Install APT Packages
   ansible.builtin.import_tasks:

@@ -1,0 +1,25 @@
+- name: Creating a Kali ISO
+  hosts: kali-machine
+  vars:
+    vm: '{{ custom_vm_opt | default(true)}}'
+    apt: '{{ custom_apt_opt | default(true)}}'
+    kde: '{{ custom_kde_opt | default(true)}}'
+    cli: '{{ custom_cli_opt | default(true)}}'
+    fish: '{{ custom_fish_opt | default(true)}}'
+    dracula: '{{ custom_dracula_opt | default(true)}}'
+    restart: '{{ custom_restart_opt | default(true)}}'
+  tasks:
+    - name: Perform Updates
+      when: apt
+      block:
+        - name: Update Packages Before Build
+          ansible.builtin.include_role:
+            name: update_apt
+            public: true
+
+        - name: Reboot after updates
+          ansible.builtin.reboot:
+            reboot_timeout: 3600
+          become: true
+          become_method: ansible.builtin.sudo
+          when: restart and update_apt_cache_update.changed

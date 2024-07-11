@@ -1,7 +1,7 @@
 - name: Updating apt repo/cache
   ansible.builtin.apt:
     update_cache: true
-  register: cache_update
+  register: update_apt_cache_update
   become: true
   become_method: ansible.builtin.sudo
 
